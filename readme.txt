@@ -1,4 +1,4 @@
-1. cd /D C:\Program Files\Google\Chrome\Application
+1. cd /D C:\Program Files\Google\Chrome\Application  
 2. chrome.exe --remote-debugging-port=9222 --user-data-dir=C:\Users\warioddly\Projects\MyParser
 3. cd /D C:\Users\warioddly\Projects\MyParser\subParser
 4. Python subParser.py

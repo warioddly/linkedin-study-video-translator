@@ -11,8 +11,8 @@ import threading, random, termcolor
 
 class MyCaption:
     def __init__(self):
-        # link = 'https://www.linkedin.com/learning/learning-vue-js-8602681/what-you-should-know?autoAdvance=true&autoSkip=false&autoplay=true&contextUrn=urn%3Ali%3AlyndaLearningPath%3A5d94ce0a498e93731fbb8711&resume=false'
-        link = input("Input link: ")
+        print(termcolor.colored("\n  =============== Программа запущена ===============\n", 'green'))
+        link = input("INPUT LINK: ")
         self.__url = 'https://www.sslproxies.org/'
         self.__headers = {
             'Accept-Encoding': 'gzip, deflate, sdch',
@@ -180,4 +180,3 @@ class MyCaption:
         call(args, shell=False)
 
 MyCaption()
-

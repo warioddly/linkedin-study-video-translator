@@ -1,4 +1,3 @@
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -12,8 +11,8 @@ import threading, random, termcolor
 
 class MyCaption:
     def __init__(self):
-        # link = 'https://www.linkedin.com/learning/learning-vue-js-8602681/what-you-should-know?autoAdvance=true&autoSkip=false&autoplay=true&contextUrn=urn%3Ali%3AlyndaLearningPath%3A5d94ce0a498e93731fbb8711&resume=false'
-        link = input("Input link: ")
+        link = 'https://www.linkedin.com/learning/learning-vue-js-8602681/what-you-should-know?autoAdvance=true&autoSkip=false&autoplay=true&contextUrn=urn%3Ali%3AlyndaLearningPath%3A5d94ce0a498e93731fbb8711&resume=false'
+        # link = input("Input link: ")
         self.__url = 'https://www.sslproxies.org/'
         self.__headers = {
             'Accept-Encoding': 'gzip, deflate, sdch',
@@ -56,88 +55,96 @@ class MyCaption:
         captionWriteTime = []; captions = []
         i = 0; amountProxy = 0; proxy = ''; flag = False
         while True:    
-            if amountProxy >= 70:
-                proxy = self.getRandom_proxy() 
-                print(termcolor.colored('Прокси изменен на ' + str(proxy), 'red', attrs=['underline']) )
-                amountProxy = 0
             try:
-                caption = self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[5]/div/div/div').text
-            except StaleElementReferenceException:
+                if amountProxy >= 70:
+                    proxy = self.getRandom_proxy() 
+                    print(termcolor.colored('Прокси изменен на ' + str(proxy), 'red', attrs=['underline']) )
+                    amountProxy = 0
                 try:
-                    caption = self.driver.find_element(By.XPATH, '//3+*[@id="vjs_video_3"]/div[5]/div/div/div/font/font/').text
-                except InvalidSelectorException:
-                    continue
-            except NoSuchElementException:
-                try:
-                    caption = self.driver.find_element(By.XPATH, '//3+*[@id="vjs_video_3"]/div[5]/div/div/div/font/font/').text
-                except InvalidSelectorException:
-                    continue
-
-            if False == self.CheckWord(caption):
-                continue
-            
-            menuUnhide = self.driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div/div/section/section[2]/div[1]')
-            self.driver.execute_script("arguments[0].setAttribute('class', 'classroom-layout__stage classroom-layout__stage--large')", menuUnhide)
-            captionTime = self.driver.find_element_by_xpath('//*[@id="vjs_video_3"]/div[3]/div[3]/div[1]/span[2]').text 
-            PlaybackProgress = str((self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[3]/div[1]/div').get_attribute("aria-valuenow"))) 
-
-            if flag == False:    
-                proxy = self.getRandom_proxy()
-                try:
-                    video = str(self.driver.find_element(By.XPATH, '//*[@id="ember38"]/div/div[1]').text)
-                except Exception:
+                    caption = self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[5]/div/div/div').text
+                except StaleElementReferenceException:
                     try:
-                        video = str(self.driver.find_element(By.XPATH, '//*[@id="ember53"]/div/div[1]/font/font').text)
-                    except Exception:
-                        video = str(self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[5]/div/div/div/font/font').text)
+                        caption = self.driver.find_element(By.XPATH, '//3+*[@id="vjs_video_3"]/div[5]/div/div/div/font/font/').text
+                    except InvalidSelectorException:
+                        continue
+                except NoSuchElementException:
+                    try:
+                        caption = self.driver.find_element(By.XPATH, '//3+*[@id="vjs_video_3"]/div[5]/div/div/div/font/font/').text
+                    except InvalidSelectorException:
+                        continue
 
-                video = video.replace("\n(Просмотрено)", "")
-                self.nameVideo = str(video.translate({ord(i): None for i in '?%;!*(),.'}))
-                self.nameVideoKg = GoogleTranslator(source='ru', target='ky').translate(video)
-                self.nameVideoKg = str(self.nameVideoKg.translate({ord(i): None for i in '?%;!*(),.'}))
-                self.driver.execute_script("arguments[0].setAttribute('class', 'classroom-layout__stage classroom-layout__stage--large')", menuUnhide)
-                captionTimeEnd = self.driver.find_element_by_xpath('//*[@id="vjs_video_3"]/div[3]/div[3]/div[3]/span[2]').text 
-                tempTimeEnd = int(captionTimeEnd[-1])
-                tempTimeEnd -= 2
+                if False == self.CheckWord(caption):
+                    continue
                 
-                l = len(captionTimeEnd)
-                captionTimeEndTemp = captionTimeEnd[:l-1]
-                captionTimeEndTemp += str(tempTimeEnd)
-                call("cls", shell=True)
-                print(termcolor.colored("\n  =============== Данные о видео ===============\n", 'green'))
-                print(termcolor.colored(video + "\t\n" + GoogleTranslator(source='ru', target='ky').translate(video) + " \t\t" + captionTimeEnd, 'cyan') )
-                print(termcolor.colored("\n=============== Программа запущена ===============\n", 'green'))
-                flag = True
+                menuUnhide = self.driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div/div/section/section[2]/div[1]')
+                self.driver.execute_script("arguments[0].setAttribute('class', 'classroom-layout__stage classroom-layout__stage--large')", menuUnhide)
+                captionTime = self.driver.find_element_by_xpath('//*[@id="vjs_video_3"]/div[3]/div[3]/div[1]/span[2]').text 
+                PlaybackProgress = str((self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[3]/div[1]/div').get_attribute("aria-valuenow"))) 
 
-            if old_caption != caption:
-                if old_time != captionTime:
-                    old_time = captionTime
-                    captionWriteTime.append(captionTime)
+                if flag == False:    
+                    proxy = self.getRandom_proxy()
+                    try:
+                        video = str(self.driver.find_element(By.XPATH, '//*[@id="ember38"]/div/div[1]').text)
+                    except Exception:
+                        try:
+                            video = str(self.driver.find_element(By.XPATH, '//*[@id="ember53"]/div/div[1]/font/font').text)
+                        except Exception:
+                            video = str(self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[5]/div/div/div/font/font').text)
 
-                translation = GoogleTranslator(source='ru', target='ky').translate(caption)
-                print("Время: " + termcolor.colored(captionTime, 'green' , attrs=['underline']) + "\tПрокси: " + termcolor.colored(str(proxy), 'green', attrs=['underline']) + "\tПрогресс: " + termcolor.colored(PlaybackProgress + "%", 'green' , attrs=['underline']))
-                print("\n-" + caption + "\n-" + translation + "\n\n")
+                    video = video.replace("\n(Просмотрено)", "")
+                    self.nameVideo = str(video.translate({ord(i): None for i in '?%;!*(),.'}))
+                    self.nameVideoKg = GoogleTranslator(source='ru', target='ky').translate(video)
+                    self.nameVideoKg = str(self.nameVideoKg.translate({ord(i): None for i in '?%;!*(),.'}))
+                    self.driver.execute_script("arguments[0].setAttribute('class', 'classroom-layout__stage classroom-layout__stage--large')", menuUnhide)
+                    captionTimeEnd = self.driver.find_element_by_xpath('//*[@id="vjs_video_3"]/div[3]/div[3]/div[3]/span[2]').text 
+                    tempTimeEnd = int(captionTimeEnd[-1])
+                    tempTimeEnd -= 2
+                    
+                    l = len(captionTimeEnd)
+                    captionTimeEndTemp = captionTimeEnd[:l-1]
+                    captionTimeEndTemp += str(tempTimeEnd)
+                    call("cls", shell=True)
+                    print(termcolor.colored("\n  =============== Данные о видео ===============\n", 'green'))
+                    print(termcolor.colored(video + "\t\n" + GoogleTranslator(source='ru', target='ky').translate(video) + " \t\t" + captionTimeEnd, 'cyan') )
+                    print(termcolor.colored("\n=============== Программа запущена ===============\n", 'green'))
+                    flag = True
 
-                captions.append(caption)
-                captions.append(translation)
-                old_caption = caption 
+                if old_caption != caption:
+                    if old_time != captionTime:
+                        old_time = captionTime
+                        captionWriteTime.append(captionTime)
 
-            if (PlaybackProgress >= '95.90' or captionTimeEndTemp <= captionTime):
-                self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
-                self.VideoDownload()
-                th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
-                th.start()
-                self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
-                th.join()
-                print(termcolor.colored("=============== Выход из программы ===============", 'green'))
-                break
+                    translation = GoogleTranslator(source='ru', target='ky').translate(caption)
+                    print("Время: " + termcolor.colored(captionTime, 'green' , attrs=['underline']) + "\tПрокси: " + termcolor.colored(str(proxy), 'green', attrs=['underline']) + "\tПрогресс: " + termcolor.colored(PlaybackProgress + "%", 'green' , attrs=['underline']))
+                    print("\n-" + caption + "\n-" + translation + "\n\n")
 
-            i += 1
-            amountProxy += 1
-        
+                    captions.append(caption)
+                    captions.append(translation)
+                    old_caption = caption 
+
+                if (PlaybackProgress >= '98.90' or captionTimeEndTemp <= captionTime):
+                    self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
+                    self.VideoDownload()
+                    th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
+                    th.start()
+                    self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
+                    th.join()
+                    print(termcolor.colored("=============== Выход из программы ===============", 'green'))
+                    break
+
+                i += 1
+                amountProxy += 1
+            except KeyboardInterrupt:
+                    self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
+                    self.VideoDownload()
+                    th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
+                    th.start()
+                    self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
+                    th.join()
+                    print(termcolor.colored("=============== Выход из программы ===============", 'green'))
+
     def VideoDownload(self):
         url = self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3_html5_api"]').get_attribute("src")
-        #urllib.request.urlretrieve(url, "Files/" + self.nameVideo + ".mp4") 
         download(url,  "Files/" + self.nameVideo + ".mp4")
 
     def CheckWord(self, s):

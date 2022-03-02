@@ -11,8 +11,8 @@ import threading, random, termcolor
 
 class MyCaption:
     def __init__(self):
-        link = 'https://www.linkedin.com/learning/learning-vue-js-8602681/what-you-should-know?autoAdvance=true&autoSkip=false&autoplay=true&contextUrn=urn%3Ali%3AlyndaLearningPath%3A5d94ce0a498e93731fbb8711&resume=false'
-        # link = input("Input link: ")
+        # link = 'https://www.linkedin.com/learning/learning-vue-js-8602681/what-you-should-know?autoAdvance=true&autoSkip=false&autoplay=true&contextUrn=urn%3Ali%3AlyndaLearningPath%3A5d94ce0a498e93731fbb8711&resume=false'
+        link = input("Input link: ")
         self.__url = 'https://www.sslproxies.org/'
         self.__headers = {
             'Accept-Encoding': 'gzip, deflate, sdch',
@@ -26,7 +26,7 @@ class MyCaption:
         self.random_port = []
         opt = Options()
         opt.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-        self.driver=webdriver.Chrome(executable_path="inlcudes\chromedriver.exe", chrome_options=opt)
+        self.driver=webdriver.Chrome(executable_path="includes\chromedriver.exe", chrome_options=opt)
         self.driver.get(link)
         self.getCaptions()
     
@@ -84,12 +84,9 @@ class MyCaption:
                 if flag == False:    
                     proxy = self.getRandom_proxy()
                     try:
-                        video = str(self.driver.find_element(By.XPATH, '//*[@id="ember38"]/div/div[1]').text)
+                        video = str(self.driver.find_element(By.XPATH, '//*[@id="ember52"]/div[2]/div[1]/font/font').text)
                     except Exception:
-                        try:
-                            video = str(self.driver.find_element(By.XPATH, '//*[@id="ember53"]/div/div[1]/font/font').text)
-                        except Exception:
-                            video = str(self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3"]/div[5]/div/div/div/font/font').text)
+                        video = str(self.driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div/div/section/section[2]/div[1]/section[1]/div[2]/div/div/h2/font/font').text)
 
                     video = video.replace("\n(Просмотрено)", "")
                     self.nameVideo = str(video.translate({ord(i): None for i in '?%;!*(),.'}))
@@ -122,7 +119,7 @@ class MyCaption:
                     captions.append(translation)
                     old_caption = caption 
 
-                if (PlaybackProgress >= '98.90' or captionTimeEndTemp <= captionTime):
+                if (PlaybackProgress >= '97.90' or captionTimeEndTemp <= captionTime):
                     self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
                     self.VideoDownload()
                     th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))

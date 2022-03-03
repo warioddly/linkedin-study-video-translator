@@ -8,6 +8,7 @@ from wget import download
 from requests import get
 from subprocess import call
 import threading, random, termcolor
+import codecs
 
 class MyCaption:
     def __init__(self):
@@ -84,14 +85,13 @@ class MyCaption:
                 if flag == False:    
                     proxy = self.getRandom_proxy()
                     try:
-                        video = str(self.driver.find_element(By.XPATH, '//*[@id="ember52"]/div[2]/div[1]/font/font').text)
+                        video = str(self.driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div/div/section/section[2]/div[1]/section[1]/div[2]/div/div/h2/font/font').text)
                     except Exception:
                         video = str(self.driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div/div/section/section[2]/div[1]/section[1]/div[2]/div/div/h2/font/font').text)
 
                     video = video.replace("\n(Просмотрено)", "")
-                    self.nameVideo = str(video.translate({ord(i): None for i in '?%;!*(),.'}))
-                    self.nameVideoKg = GoogleTranslator(source='ru', target='ky').translate(video)
-                    self.nameVideoKg = str(self.nameVideoKg.translate({ord(i): None for i in '?%;!*(),.'}))
+                    self.nameVideo = str(video.translate({ord(i): None for i in '?%;!*(),./\\:'}))
+                    self.nameVideoKg = GoogleTranslator(source='ru', target='ky').translate(self.nameVideo)
                     self.driver.execute_script("arguments[0].setAttribute('class', 'classroom-layout__stage classroom-layout__stage--large')", menuUnhide)
                     captionTimeEnd = self.driver.find_element_by_xpath('//*[@id="vjs_video_3"]/div[3]/div[3]/div[3]/span[2]').text 
                     tempTimeEnd = int(captionTimeEnd[-1])
@@ -119,13 +119,13 @@ class MyCaption:
                     captions.append(translation)
                     old_caption = caption 
 
-                if (PlaybackProgress >= '97.90' or captionTimeEndTemp <= captionTime):
+                if (PlaybackProgress >= '99.98' or captionTime >= captionTimeEndTemp):
                     self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
                     self.VideoDownload()
-                    th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
-                    th.start()
-                    self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
-                    th.join()
+                    # th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
+                    # th.start()
+                    # self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
+                    # th.join()
                     print(termcolor.colored("=============== Выход из программы ===============", 'green'))
                     break
 
@@ -134,11 +134,12 @@ class MyCaption:
             except KeyboardInterrupt:
                     self.ExportsCaption(captions, captionWriteTime, captionTimeEnd)
                     self.VideoDownload()
-                    th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
-                    th.start()
-                    self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
-                    th.join()
+                    # th = threading.Thread(target=self.EmbeddingSubtitle, args=('kg', self.nameVideo, self.nameVideoKg, self.nameVideoKg))
+                    # th.start()
+                    # self.EmbeddingSubtitle("ru", self.nameVideo, self.nameVideo, self.nameVideo)
+                    # th.join()
                     print(termcolor.colored("=============== Выход из программы ===============", 'green'))
+
 
     def VideoDownload(self):
         url = self.driver.find_element(By.XPATH, '//*[@id="vjs_video_3_html5_api"]').get_attribute("src")
@@ -150,13 +151,15 @@ class MyCaption:
 
     def ExportsCaption(self, caption, captionTime, captionTimeEnd):
         i = 0; j = 0; k = 1
-        f_ru = open("Files/" + self.nameVideo + "_ru.srt", "a", encoding="utf-8")
-        f_kg = open("Files/" + self.nameVideoKg + "_kg.srt", "a", encoding="utf-8")
+        f_ru = open('Files/' + self.nameVideo + '_ru.srt', "a", encoding="UTF-8")
+        f_kg = open("Files/" + self.nameVideoKg + "_kg.srt", "a", encoding="UTF-8")
 
         while i < len(caption):
             f_ru.write(str(k) + '\n')
             f_kg.write(str(k) + '\n')
             while j < k:
+                if (j >= len(captionTime)):
+                    break
                 f_ru.write('00:0' + captionTime[j] + ",100" + " --> ")
                 f_kg.write('00:0' + captionTime[j] + ",100" + " --> ")
                 j += 1
